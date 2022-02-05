@@ -316,7 +316,6 @@ pub enum MetadataInstruction {
     RevokeCollectionAuthority,
     ///See [set_and_verify_collection] for Doc
     SetAndVerifyCollection,
-
     ///See [freeze_delegated_account] for Doc
     FreezeDelegatedAccount,
     ///See [thaw_delegated_account] for Doc

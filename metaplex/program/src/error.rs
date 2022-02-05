@@ -470,6 +470,9 @@ pub enum MetaplexError {
     /// Auction manager already in finished state
     #[error("Auction manager already in finished state")]
     AuctionManagerInFishedState,
+
+    #[error("Invalid Token Metadata Program ID")]
+    InvalidMetadataProgram
 }
 
 impl PrintProgramError for MetaplexError {

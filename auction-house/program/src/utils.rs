@@ -1,4 +1,4 @@
-use crate::{AuctionHouse, ErrorCode};
+use crate::{AuctionHouse, ErrorCode, PREFIX};
 use anchor_lang::{
     prelude::*,
     solana_program::{
@@ -489,4 +489,35 @@ pub fn assert_derivation(
         return Err(ErrorCode::DerivedKeyInvalid.into());
     }
     Ok(bump)
+}
+
+
+pub fn trade_state_seeds<'a>(
+    public_buy: bool,
+    wallet: Pubkey,
+    mint: Pubkey,
+    buyer_price: u64,
+    token_size: u64,
+    token_holder: Option<Pubkey>,
+    auction_house: Pubkey,
+    treasury_mint: Pubkey
+) -> Result<Vec<&'a[u8]>, ProgramError> {
+    if !public_buy && token_holder.is_none() {
+        return Err(ErrorCode::DerivedKeyInvalid.into());
+    }
+    let mut seeds = vec![
+        PREFIX.as_bytes(),
+        wallet.as_ref(),
+        auction_house.as_ref(),
+    ];
+    if public_buy {
+        seeds.push(token_holder.unwrap().as_ref());
+    }
+    seeds.append(&mut vec![
+        treasury_mint.as_ref(),
+        mint.as_ref(),
+        &buyer_price.to_le_bytes(),
+        &token_size.to_le_bytes()
+    ]);
+    Ok(seeds)
 }

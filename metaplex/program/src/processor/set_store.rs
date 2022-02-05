@@ -31,6 +31,9 @@ pub fn set_store_logic<'a>(
 ) -> ProgramResult {
     assert_signer(payer_info)?;
     assert_signer(admin_wallet_info)?;
+    if *token_metadata_program_info.key != mpl_token_metadata::id() {
+        return Err(MetaplexError::InvalidMetadataProgram.into());
+    }
     if !store_info.data_is_empty() {
         assert_owned_by(store_info, program_id)?;
     }
