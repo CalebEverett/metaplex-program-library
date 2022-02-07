@@ -47,7 +47,7 @@ pub mod nft_candy_machine_v2 {
         let wallet = &ctx.accounts.wallet;
         let payer = &ctx.accounts.payer;
         let token_program = &ctx.accounts.token_program;
-        let recent_blockhashes = &ctx.accounts.recent_blockhashes;
+        let recent_slothashes = &ctx.accounts.slothashes;
         let instruction_sysvar_account = &ctx.accounts.instruction_sysvar_account;
         let mut price = candy_machine.data.price;
         if let Some(es) = &candy_machine.data.end_settings {
@@ -255,7 +255,7 @@ pub mod nft_candy_machine_v2 {
                 ],
             )?;
         }
-        let data = recent_blockhashes.data.borrow();
+        let data = recent_slothashes.data.borrow();
         let most_recent = array_ref![data, 8, 8];
 
         let index = u64::from_le_bytes(*most_recent);
@@ -718,8 +718,8 @@ pub struct MintNFT<'info> {
     system_program: Program<'info, System>,
     rent: Sysvar<'info, Rent>,
     clock: Sysvar<'info, Clock>,
-    #[account(address = sysvar::recent_blockhashes::ID)]
-    recent_blockhashes: UncheckedAccount<'info>,
+    #[account(address = sysvar::slot_hashes::ID)]
+    slothashes: UncheckedAccount<'info>,
     #[account(address = sysvar::instructions::id())]
     instruction_sysvar_account: UncheckedAccount<'info>,
     // > Only needed if candy machine has a gatekeeper
